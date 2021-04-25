@@ -3,13 +3,12 @@ import 'firebase/auth'
 
 
 const firebaseConfig = {
-    apiKey: "AIzaSyCAhaauu7LlTBLrgJxxueJQC9F8MDLPuEg",
-    authDomain: "todoapp-test-ca880.firebaseapp.com",
-    projectId: "todoapp-test-ca880",
-    storageBucket: "todoapp-test-ca880.appspot.com",
-    messagingSenderId: "20493954097",
-    appId: "1:20493954097:web:fe437b879e654d17443910",
-    measurementId: "G-QM08N8SL57"
+    apiKey: "AIzaSyBL-wvFER7dwaeSEIjCJ5ZcsrRs8UYxTDI",
+    authDomain: "todoapp-4c0ba.firebaseapp.com",
+    projectId: "todoapp-4c0ba",
+    storageBucket: "todoapp-4c0ba.appspot.com",
+    messagingSenderId: "157398747241",
+    appId: "1:157398747241:web:65cbb5237ae4d826e97af8"
 }
 firebase.initializeApp(firebaseConfig)
 

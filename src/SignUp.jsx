@@ -33,6 +33,7 @@ const SignUp = ({history}) => {
     const Title = styled.h1`
     text-align: center;
     font-size: 45px;
+    width: 100%;
     `;
 
     const Wrap = styled.h1`
@@ -40,8 +41,15 @@ const SignUp = ({history}) => {
     flex-direction: column;
     align-items: center;
     `
-    const inputWrapper = styled.div`
-    margin-bottom: 10px;
+    const InputWrap = styled.div`
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    `
+    const Input = styled.input` 
+    padding:5px;
+    font-size:20px;
+    border:1px solid black;
     `
 
     const ButtonWrap = styled.div`
@@ -50,19 +58,14 @@ const SignUp = ({history}) => {
     align-items: center;
     `
     const Button = styled.button`
-    width:200px; 
+    width: 100%; 
     margin-top:10px;
     margin-bottom:30px;
     padding:15px;
     font-size:18px;
     border:1px solid black;
     `
-    const Input = styled.input`
-    width:300px; 
-    padding:5px;
-    font-size:20px;
-    border:1px solid black;
-    `
+    
 
 
     return (
@@ -70,7 +73,7 @@ const SignUp = ({history}) => {
             <Title>Sign Up</Title>
             <form onSubmit={handleSubmit}>
                 <Wrap>
-                    <div>
+                    <InputWrap>
                         <label htmlFor='email'>E-mail</label>
                         <Input
                             onChange={e => setEmail(e.target.value)}
@@ -79,8 +82,8 @@ const SignUp = ({history}) => {
                             id='email' 
                             placeholder='Email' 
                         />
-                    </div>
-                    <div>
+                    </InputWrap>
+                    <InputWrap>
                         <label htmlFor='password'>Password</label>
                         <Input 
                             onChange={e => setPassword(e.target.value)}
@@ -89,8 +92,8 @@ const SignUp = ({history}) => {
                             id='password' 
                             placeholder='Password' 
                         />
-                    </div>
-                    <div>
+                    </InputWrap>
+                    <InputWrap>
                         <label htmlFor='name'>name</label>
                         <Input 
                             onChange={e => setName(e.target.value)}
@@ -99,7 +102,7 @@ const SignUp = ({history}) => {
                             id='name' 
                             placeholder='name' 
                         />
-                    </div> 
+                    </InputWrap> 
                 </Wrap>
                 <ButtonWrap>
                     <Button style={{marginBottom: 10}} type='submit'>Sign Up</Button>
