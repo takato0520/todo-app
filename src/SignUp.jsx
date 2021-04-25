@@ -28,45 +28,7 @@ const SignUp = ({history}) => {
         history.push("/login");
     }
 
-    //styled-componensの定義//
-
-    const Title = styled.h1`
-    text-align: center;
-    font-size: 45px;
-    width: 100%;
-    `;
-
-    const Wrap = styled.h1`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    `
-    const InputWrap = styled.div`
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    `
-    const Input = styled.input` 
-    padding:5px;
-    font-size:20px;
-    border:1px solid black;
-    `
-
-    const ButtonWrap = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    `
-    const Button = styled.button`
-    width: 100%; 
-    margin-top:10px;
-    margin-bottom:30px;
-    padding:15px;
-    font-size:18px;
-    border:1px solid black;
-    `
-    
-
+   
 
     return (
         <div>
@@ -76,7 +38,7 @@ const SignUp = ({history}) => {
                     <InputWrap>
                         <label htmlFor='email'>E-mail</label>
                         <Input
-                            onChange={e => setEmail(e.target.value)}
+                            onChange={e =>{setEmail(e.target.value)} }
                             name='email' 
                             type='email' 
                             id='email' 
@@ -86,7 +48,7 @@ const SignUp = ({history}) => {
                     <InputWrap>
                         <label htmlFor='password'>Password</label>
                         <Input 
-                            onChange={e => setPassword(e.target.value)}
+                            onChange={e => {setPassword(e.target.value)} }
                             name='password' 
                             type='password' 
                             id='password' 
@@ -96,7 +58,7 @@ const SignUp = ({history}) => {
                     <InputWrap>
                         <label htmlFor='name'>name</label>
                         <Input 
-                            onChange={e => setName(e.target.value)}
+                            onChange={e => {setName(e.target.value)}}
                             name='name' 
                             type='name' 
                             id='name' 
@@ -112,5 +74,45 @@ const SignUp = ({history}) => {
         </div>
     )
 }
+
+ //styled-componensの定義//
+
+ const Title = styled.h1`
+ text-align: center;
+ font-size: 45px;
+ width: 100%;
+ `;
+
+ const Wrap = styled.div`
+ display: flex;
+ flex-direction: column;
+ align-items: center;
+ `
+ const InputWrap = styled.div`
+ display: flex;
+ flex-direction: column;
+ width: 100%;
+ `
+ const Input = styled.input` 
+ padding:5px;
+ font-size:20px;
+ border:1px solid black;
+ `
+
+ const ButtonWrap = styled.div`
+ display: flex;
+ flex-direction: column;
+ align-items: center;
+ `
+ const Button = styled.button`
+ width: 100%; 
+ margin-top:10px;
+ margin-bottom:30px;
+ padding:15px;
+ font-size:18px;
+ border:1px solid black;
+ `
+ 
+
 
 export default SignUp
