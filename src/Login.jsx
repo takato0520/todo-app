@@ -2,6 +2,7 @@ import React, { useState, useContext } from 'react'
 import { Redirect } from 'react-router-dom'
 import { AuthContext } from './AuthService'
 import firebase from './config/firebase'
+import styled from 'styled-components'
 
 const Login = ({ history }) => {
     const [email, setEmail] = useState('')
@@ -23,9 +24,18 @@ const Login = ({ history }) => {
     if (user) {
         return <Redirect to="/" />
     }
+
+    //styled-componentsの定義
+
+    const Title = styled.h1`
+    text-align:center;
+    font-size:45px;
+    `
+
+
     return (
         <>
-            <h1>Login</h1>
+            <Title>Login</Title>
             <form onSubmit={handleSubmit}>
                 <div>
                     <label htmlFor='email'>E-mail</label>
@@ -60,6 +70,8 @@ const Login = ({ history }) => {
             </form>
         </>
     )
+
+
 }
 
 export default Login
