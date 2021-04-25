@@ -25,14 +25,6 @@ const Login = ({ history }) => {
         return <Redirect to="/" />
     }
 
-    //styled-componentsの定義
-
-    const Title = styled.h1`
-    text-align:center;
-    font-size:45px;
-    `
-
-
     return (
         <>
             <Title>Login</Title>
@@ -73,5 +65,12 @@ const Login = ({ history }) => {
 
 
 }
+
+//styled-componentsの定義
+
+const Title = styled.h1`
+    text-align:center;
+    font-size:45px;
+    `
 
 export default Login
