@@ -64,7 +64,7 @@ const Login = ({ history }) => {
                     />
                 </div>
                 <button type='submit'>Login</button>
-                <button onClick={moveToSignUp}>Sign Upへ</button>
+                <button onClick={moveToSignUp}>サインアップへ</button>
             </form>
         </>
     )
