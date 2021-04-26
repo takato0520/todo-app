@@ -16,10 +16,15 @@ const Login = ({ history }) => {
             })
             .catch(err => {
                 console.log(err)
+                alert(err)
             })
     }
 
     const user = useContext(AuthContext)
+
+    const moveToSignUp = () => {
+        history.push("/signup")
+    }
 
     if (user) {
         return <Redirect to="/" />
@@ -59,6 +64,7 @@ const Login = ({ history }) => {
                     />
                 </div>
                 <button type='submit'>Login</button>
+                <button onClick={moveToSignUp}>Sign Upへ</button>
             </form>
         </>
     )
