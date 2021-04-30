@@ -1,13 +1,34 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import firebase from './config/firebase'
+import 'firebase/firestore'
+
 
 const TaskDetail = ({ history }) => {
+
     const [text, setText] = useState()
 
+    //前のテキストをtextareaに返す処理
+    useEffect(() => {
+        firebase.firestore().collection('tasks').doc('xJChN3VORCrnp7Ih1GvF').get()
+            .then(text => { setText(text.data().detail) })
+    }, [])
+
+
+    //テキストをFirebaseに保存する関数
+    const saveTextData = (e) => {
+        e.preventDefault()
+        firebase.firestore().collection('tasks').doc('xJChN3VORCrnp7Ih1GvF').update({
+            detail: text
+        })
+    }
+
+    //テキストの削除をする関数
     const deleteText = (e) => {
         e.preventDefault()
         setText("")
     }
 
+    //Roomコンポーネントへ移動する関数
     const moveToRoom = (e) => {
         e.preventDefault()
         history.push("/")
@@ -29,7 +50,7 @@ const TaskDetail = ({ history }) => {
                     }
                 }
             />
-            <button>保存</button>
+            <button onClick={saveTextData}>保存</button>
             <button onClick={deleteText}>削除</button>
             <button onClick={moveToRoom}>閉じる</button>
         </>
