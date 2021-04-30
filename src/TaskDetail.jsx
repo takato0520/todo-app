@@ -1,13 +1,14 @@
 import { useEffect, useState } from 'react'
 import firebase from './config/firebase'
 import 'firebase/firestore'
-
+import styled from 'styled-components'
 
 const TaskDetail = ({ history }) => {
 
-    const [text, setText] = useState()
+    const [text, setText] = useState() //textareaの内容
+    const [alerm, setAlerm] = useState(false) //textに変更があったかどうか判定する値
 
-    //前のテキストをtextareaに返す処理
+    //前保存したテキストをtextareaに返す処理　*Roomを開いた時にロードした方が良いと思う
     useEffect(() => {
         firebase.firestore().collection('tasks').doc('xJChN3VORCrnp7Ih1GvF').get()
             .then(text => { setText(text.data().detail) })
@@ -31,9 +32,15 @@ const TaskDetail = ({ history }) => {
     //Roomコンポーネントへ移動する関数
     const moveToRoom = (e) => {
         e.preventDefault()
-        history.push("/")
+        if (alerm) {
+            if (window.confirm('内容に変更があります。保存しますか?')) {
+                saveTextData(e)
+                history.push("/")
+            }
+        } else {
+            history.push("/")
+        }
     }
-    console.log(text)
 
     return (
         <>
@@ -41,20 +48,28 @@ const TaskDetail = ({ history }) => {
             <div>期限</div>
             <div>かかる時間</div>
             <h2>タスクの詳細</h2>
-            <div>{text}</div>
-            <textarea
+            <Textarea
                 value={text}
                 onChange={
                     e => {
                         setText(e.target.value)
+                        setAlerm(true)
                     }
                 }
             />
-            <button onClick={saveTextData}>保存</button>
-            <button onClick={deleteText}>削除</button>
-            <button onClick={moveToRoom}>閉じる</button>
+            <ButtonWrap>
+                <button onClick={saveTextData}>保存</button>
+                <button onClick={deleteText}>削除</button>
+                <button onClick={moveToRoom}>閉じる</button>
+            </ButtonWrap>
         </>
     )
 }
+const ButtonWrap = styled.div`
 
+`
+
+const Textarea = styled.textarea`
+width:500px;
+`
 export default TaskDetail
