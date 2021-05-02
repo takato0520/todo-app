@@ -1,55 +1,8 @@
-/* import React, { useState } from 'react'
-import classes from './taskinput.module.css'
-import Input from './input'
-
-const getKey = () => Math.random().toString(32).substring(2);
-
-const Taskinput = () => {
-    const [items, setItems] = useState([])
-
-
-    const handleAdd = content => {
-        const itemarray = Object.entries(items)
-        setItems([...items,
-
-        { content: content, key: getKey() }
-        ])
-        console.log(content)
-        console.log(items)
-        console.log(itemarray)
-    }
-
-
-    return (
-        <>
-            <div className={classes.taskbar}>
-                <p>task name</p>
-                <p>task time</p>
-                <p>dead line</p>
-            </div>
-
-            <div className={classes.textbox}>
-                <Input onAdd={handleAdd} />
-                
-
-            </div>
-            <div
-                className={`${classes.icon} ${classes.iconplus}`}
-                onClick={handleAdd} >
-                <span className={classes.icon__mark}></span>
-            </div>
-            <div>{items}</div>
-
-        </>
-    )
-}
-
-export default Taskinput;
 
 
 
 
- */
+
 import classes from './taskinput.module.css'
 import React, { useState } from 'react';
 
@@ -68,14 +21,7 @@ function Taskinput() {
             arr: '',
             isCompleted: false
         },
-        /* {
-            task: 'Learn React Hook',
-            isCompleted: false
-        },
-        {
-            task: 'Learn Gatsby.js',
-            isCompleted: false
-        }, */
+
     ]
 
     const [todos, setTodo] = useState(initialState);
@@ -102,25 +48,20 @@ function Taskinput() {
     console.log(time)
 
     //taskの締め切りについて
-    var today = new Date()
-
-
-    var nowdate = today.getTime()
-    console.log(nowdate)
-    console.log(today)
 
     const [dead, setDead] = useState('')
+    let today = new Date()
+    let nowdate = today.getTime()
+    let deadTime = Date.parse(new Date(dead))
+    console.log(deadTime)
+    let differdate = deadTime - nowdate
+    console.log(differdate)
+
+    console.log(nowdate)
+    /*    console.log(today) */
 
 
-    const [year, setYear] = useState('')
-    const [month, setMonth] = useState('')
-    const [day, setDay] = useState('')
-    /* const [hour, setHour] = useState('') */
 
-    var targetDate = new Date(year, month, day)
-    var changeDate = targetDate.getTime();
-
-    const differdate = changeDate - nowdate
 
 
     console.log(dead)
@@ -135,17 +76,16 @@ function Taskinput() {
     const handleSubmit = (event) => {
         event.preventDefault()
         if (task === '') return
-        setTodo(todos => [...todos, { task, time, dead, arr,/* message */ isCompleted: false }])
+        const tmpTodo = [...todos, { task, time, dead, arr: differdate,/*  message: `${year}`"年", */ isCompleted: false }]
+
         setTask('')
         console.log('add')
-        /* setMessage(() => { as: differdate }) */
 
-        /* let newarr = setArr([...arr, differdate])
-        console.log(setArr([...arr, `${differdate}`])) */
-        setArr(differdate)
+        setArr(tmpTodo)
+
         console.log(arr)
         console.log(differdate)
-        todos.sort(function (a, b) {
+        tmpTodo.sort(function (a, b) {
             console.log(a.arr)
             if (a.arr < b.arr) {
                 return -1;
@@ -155,7 +95,8 @@ function Taskinput() {
             }
             return 0;
         })
-        console.log(todos)
+        setTodo(tmpTodo)
+
     }
 
 
@@ -170,6 +111,7 @@ function Taskinput() {
     }
 
 
+    console.log(Date.parse(new Date(dead)))
 
     return (
         <>
@@ -200,14 +142,10 @@ function Taskinput() {
 
                 </div>
                 <div>
-                    <input type="text" onChange={e => setYear(e.target.value)} />年
-                    <input type="text" onChange={e => setMonth(e.target.value)} />月
-                    <input type="text" onChange={e => setDay(e.target.value)} />日
-                    {/* <input type="text" onChange={e => setHour(e.target.value)} />時 */}
-                    <div>{year}年{month}月{day}日</div>
-                    {/* <input type="date"
+
+                    <input type="date"
                         onChange={e => setDead(e.target.value)} />
-                    <div>{dead}</div> */}
+                    <div>{dead}</div>
                 </div>
                 <div><Button clicked={handleSubmit} /></div>
             </div>
