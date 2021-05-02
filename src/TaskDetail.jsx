@@ -15,7 +15,7 @@ const TaskDetail = ({ history }) => {
     }, [])
 
 
-    //テキストをFirebaseに保存する関数
+    //テキストをFirebaseに保存する関数　*docの値を変数にする
     const saveTextData = (e) => {
         e.preventDefault()
         firebase.firestore().collection('tasks').doc('xJChN3VORCrnp7Ih1GvF').update({
