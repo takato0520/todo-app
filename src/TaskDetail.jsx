@@ -21,25 +21,26 @@ const TaskDetail = ({ history }) => {
         firebase.firestore().collection('tasks').doc('xJChN3VORCrnp7Ih1GvF').update({
             detail: text
         })
+        setAlerm(false)
     }
 
     //テキストの削除をする関数
     const deleteText = (e) => {
         e.preventDefault()
         setText("")
+        setAlerm(true)
     }
 
     //Roomコンポーネントへ移動する関数
+    //textareaの内容に変更があった時内容を保存するか確認する
     const moveToRoom = (e) => {
         e.preventDefault()
         if (alerm) {
             if (window.confirm('内容に変更があります。保存しますか?')) {
                 saveTextData(e)
-                history.push("/")
             }
-        } else {
-            history.push("/")
         }
+        history.push("/")
     }
 
     return (
@@ -58,18 +59,30 @@ const TaskDetail = ({ history }) => {
                 }
             />
             <ButtonWrap>
-                <button onClick={saveTextData}>保存</button>
-                <button onClick={deleteText}>削除</button>
-                <button onClick={moveToRoom}>閉じる</button>
+                <Button onClick={saveTextData}>保存</Button>
+                <Button onClick={deleteText}>削除</Button>
+                <Button onClick={moveToRoom}>閉じる</Button>
             </ButtonWrap>
         </>
     )
 }
+
+const Textarea = styled.textarea`
+width:500px;
+height:100px;
+`
+
+const Button = styled.button`
+color:#000;
+background-color:yellow;
+width:100px;
+cursor:pointer;
+`
+
+
 const ButtonWrap = styled.div`
 
 `
 
-const Textarea = styled.textarea`
-width:500px;
-`
+
 export default TaskDetail
