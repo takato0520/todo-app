@@ -1,0 +1,10 @@
+.todolist {
+    display: flex;
+    justify-content: space-between;
+}
+
+.tasklist{
+    display: flex;
+    justify-content: space-between;
+    list-style: none;
+}

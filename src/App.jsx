@@ -6,6 +6,7 @@ import SignUp from './SignUp'
 import TaskDetail from './TaskDetail'
 import TaskHistory from './TaskHistory'
 import Header from './Header'
+import Taskinput from './Taskinput/taskinput'
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
           <Route exact path='/taskHistory' component={TaskHistory} />
         </Switch>
       </Router>
+      <Taskinput />
     </>
   )
 }
