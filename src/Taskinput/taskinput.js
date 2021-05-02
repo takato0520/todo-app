@@ -115,7 +115,7 @@ function Taskinput() {
 
     return (
         <>
-            <h1>ToDo List</h1>
+
             <div className={classes.todolist}>
 
                 <div>
