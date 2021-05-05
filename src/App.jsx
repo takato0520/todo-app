@@ -20,9 +20,9 @@ function App() {
           <Route exact path='/signup' component={SignUp} />
           <Route exact path='/taskDetail' component={TaskDetail} />
           <Route exact path='/taskHistory' component={TaskHistory} />
+          <Taskinput />
         </Switch>
       </withRouter>
-      <Taskinput />
     </>
   )
 }

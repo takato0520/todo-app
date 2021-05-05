@@ -8,3 +8,11 @@
     justify-content: space-between;
     list-style: none;
 }
+
+.none{
+    display: none;
+}
+
+.play{
+    background-color: aquamarine;
+}
