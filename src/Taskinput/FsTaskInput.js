@@ -33,7 +33,6 @@ const FsTaskInput = (Taskinput) => {
             id: id,
             isCompleted: isCompleted,
             detail: detail
-
         })
     }
 
@@ -69,4 +68,4 @@ const FsTaskInput = (Taskinput) => {
     )
 }
 
-export default FsTaskInput;
+export default FsTaskInput
