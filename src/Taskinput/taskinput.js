@@ -1,40 +1,41 @@
 
 
-
-
-
 import classes from './taskinput.module.css'
-import React, { useState } from 'react';
-
+import React, { useState, useEffect } from 'react';
 import Button from './button'
 import styled from 'styled-components';
 import { withRouter } from 'react-router-dom'
+import { nanoid } from 'nanoid';
 
+//key
 const getKey = () => Math.random().toString(32).substring(2);
 
+
+
 function Taskinput({ history }) {
+
+    /* const [text, setText] = useState() */ //textareaの内容
+    //firestoreから読み込んだtextarea
+    /* useEffect(() => {
+        firebase.firestore().collection('tasks').doc('xJChN3VORCrnp7Ih1GvF').get()
+            .then(text => { setText(text.data().detail) })
+    }, []) */
+
+
+
+
 
     const moveToTaskDetail = (e) => {
         history.push("/taskDetail");
     }
 
+    const moveToTaskComp = (e) => {
+        history.push("/taskHistory")
+    }
 
-    //タスクの追加
-    const initialState = [
-        {
-            task: '',
-            time: '',
-            dead: '',
-            message: '',
-            arr: '',
-            isCompleted: false
-        },
-
-    ]
-
-    const [todos, setTodo] = useState(initialState);
-
-
+    //taskみたいなものを入れておく配列
+    const [todos, setTodo] = useState([]);
+    //タスク名の変数
     const [task, setTask] = useState('')
 
     const handleNewTask = (event) => {
@@ -64,7 +65,7 @@ function Taskinput({ history }) {
     ]
 
 
-
+    //想定される時間の関数
     const Change = e => {
         setTime(e.target.value)
     }
@@ -80,15 +81,15 @@ function Taskinput({ history }) {
     })
     //締め切りの日にち
     const [dead, setDead] = useState('')
+    //今日の日にちから締め切りまでの日数を計算
     let today = new Date()
     let nowdate = today.getTime()
     let deadTime = Date.parse(new Date(dead))
-
     let differdate = deadTime - nowdate - getSlicetime
 
-    /*    console.log(today) */
-    let classAdd = true
-
+    //削除ボタンと詳細ボタンの表示を決めておく変数
+    const [classAdd, setClassAdd] = useState(false)
+    const [classDetail, setClassDetail] = useState(false)
 
     //differdateを並べておく配列
     const [arr, setArr] = useState('')
@@ -98,9 +99,10 @@ function Taskinput({ history }) {
     //plusbuttonクリック時のイベント
     const handleSubmit = (event) => {
         event.preventDefault()
-        classAdd = true
+        setClassAdd(true)
+        setClassDetail(true)
         if (task === '') return
-        const tmpTodo = [...todos, { task, time, dead, arr: differdate,/*  message: `${year}`"年", */ isCompleted: false }]
+        const tmpTodo = [...todos, { task, time, dead, arr: differdate,/*  message: `${year}`"年", */ isCompleted: false, done: false, id: nanoid.generate() }]
 
         setTask('')
         setArr(tmpTodo)
@@ -117,6 +119,18 @@ function Taskinput({ history }) {
         setTodo(tmpTodo)
 
         console.log(classAdd)
+    }
+
+
+    //checkboxを反転させる関数
+    const handleCheck = (checked) => {
+        const checkedTodos = todos.map(todo => {
+            if (todo.key === checked.key) {
+                todo.done = !todo.done
+            }
+            return todo
+        })
+        setTodo(checkedTodos);
     }
 
 
@@ -137,7 +151,10 @@ function Taskinput({ history }) {
 
     return (
         <>
-
+            {/* <TaskDetail
+                text={text}
+                save={saveTextData}
+                delete={deleteText} /> */}
             <div className={classes.todolist}>
 
                 <div>
@@ -168,11 +185,18 @@ function Taskinput({ history }) {
                 <TaskWrap>
                     {todos.map((todo, index) => (
                         <div className={classes.tasklist}>
+                            <input
+                                type="checkbox"
+                                checked={todo.done}
+                                onChange={handleCheck}
+                            />
                             <Item key={getKey()}>{todo.task} </Item>
                             <Item key={getKey()}>{todo.time}</Item>
                             <Item key={getKey()}>{todo.dead}</Item>
                             {/* <li key={getKey()}>締め切りまで{todo.message}</li> */}
-                            <Buttontask onClick={moveToTaskDetail}>詳細</Buttontask>
+                            <Buttontask
+                                className={classDetail ? classes.play : classes.none}
+                                onClick={moveToTaskDetail}>詳細</Buttontask>
                             <input
                                 className={classAdd ? classes.play : classes.none}
                                 type="button"
@@ -184,7 +208,9 @@ function Taskinput({ history }) {
 
 
             </ul>
-
+            <input type="button"
+                value="履歴画面へ"
+                onClick={moveToTaskComp} />
         </>
     );
 }

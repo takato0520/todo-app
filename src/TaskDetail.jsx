@@ -11,9 +11,22 @@ const TaskDetail = ({ history }) => {
     //前保存したテキストをtextareaに返す処理　*Roomを開いた時にロードした方が良いと思う
     useEffect(() => {
         firebase.firestore().collection('tasks').doc('xJChN3VORCrnp7Ih1GvF').get()
-            .then(text => { setText(text.data().detail) })
+            .then(text => { setText(text.data()) })
     }, [])
 
+
+
+    //Roomコンポーネントへ移動する関数
+    //textareaの内容に変更があった時内容を保存するか確認する
+    const moveToRoom = (e) => {
+        e.preventDefault()
+        if (alerm) {
+            if (window.confirm('内容に変更があります。保存しますか?')) {
+                saveTextData(e)
+            }
+        }
+        history.push("/")
+    }
 
     //テキストをFirebaseに保存する関数
     const saveTextData = (e) => {
@@ -31,17 +44,6 @@ const TaskDetail = ({ history }) => {
         setAlerm(true)
     }
 
-    //Roomコンポーネントへ移動する関数
-    //textareaの内容に変更があった時内容を保存するか確認する
-    const moveToRoom = (e) => {
-        e.preventDefault()
-        if (alerm) {
-            if (window.confirm('内容に変更があります。保存しますか?')) {
-                saveTextData(e)
-            }
-        }
-        history.push("/")
-    }
 
     return (
         <>
