@@ -6,7 +6,7 @@ import styled from 'styled-components'
 const TaskDetail = ({ history }) => {
 
     const [text, setText] = useState() //textareaの内容
-    const [alerm, setAlerm] = useState(false) //textに変更があったかどうか判定する値
+    const [isChanged, setIsChanged] = useState(false) //textに変更があったかどうか判定する値
 
     //前保存したテキストをtextareaに返す処理　*Roomを開いた時にロードした方が良いと思う
     useEffect(() => {
@@ -21,21 +21,21 @@ const TaskDetail = ({ history }) => {
         firebase.firestore().collection('tasks').doc('xJChN3VORCrnp7Ih1GvF').update({
             detail: text
         })
-        setAlerm(false)
+        setIsChanged(false)
     }
 
     //テキストの削除をする関数
     const deleteText = (e) => {
         e.preventDefault()
         setText("")
-        setAlerm(true)
+        setIsChanged(true)
     }
 
     //Roomコンポーネントへ移動する関数
     //textareaの内容に変更があった時内容を保存するか確認する
     const moveToRoom = (e) => {
         e.preventDefault()
-        if (alerm) {
+        if (isChanged) {
             if (window.confirm('内容に変更があります。保存しますか?')) {
                 saveTextData(e)
             }
@@ -54,7 +54,7 @@ const TaskDetail = ({ history }) => {
                 onChange={
                     e => {
                         setText(e.target.value)
-                        setAlerm(true)
+                        setIsChanged(true)
                     }
                 }
             />
