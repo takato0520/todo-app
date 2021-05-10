@@ -1,5 +1,14 @@
+import styled from 'styled-components';
+import List from './List'
 const Room = () => {
-    return (null)
+
+
+    return (
+        <div>
+            <List />
+        </div>
+     
+    )
 }
 
 export default Room
