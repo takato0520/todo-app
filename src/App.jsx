@@ -12,7 +12,7 @@ import firebase from './config/firebase'
 import 'firebase/firestore'
 
 function App() {
-
+  
   // firestoreからdate取得するコードです
  
 
@@ -40,13 +40,14 @@ function App() {
   //   });
   // }, [])  
     
+  
 
         
 
 
   return (
     <>
-      <button　onClick= {getTasks}>取得</button> {/* データが取得されているかの確認するボタンです */}
+      {/* <button　onClick= {getTasks}>取得</button> データが取得されているかの確認するボタンです。（テスト用） */}
       <Header />
       <withRouter>
         <Switch>
