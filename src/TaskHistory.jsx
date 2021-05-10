@@ -1,21 +1,15 @@
-import firebase from './config/firebase'
 import styled from 'styled-components'
 import { useState, useEffect } from 'react'
 import CompletedTask from './CompletedTask'
 
-const TaskHistory = () => {
+const TaskHistory = ({ getTasks }) => {
 
     const [completedTasks, setCompletedTask] = useState([])
 
     useEffect(() => {
-        firebase.firestore().collection('tasks')
-            .onSnapshot((snapshot) => {
-                const completedTasks = snapshot.docs.map(doc => {
-                    return doc.data()
-                })
-                setCompletedTask(completedTasks.filter(task => task.isCompleted === true))
-            })
-    }, [])
+        setCompletedTask(getTasks.filter(task => task.isCompleted === true))
+    }
+        , [])
 
     console.log(completedTasks)
 
