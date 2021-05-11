@@ -1,11 +1,10 @@
-
-
 import classes from './taskinput.module.css'
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Button from './button'
 import styled from 'styled-components';
 import { withRouter } from 'react-router-dom'
 import { nanoid } from 'nanoid';
+import firebase from '../config/firebase'
 
 //key
 const getKey = () => Math.random().toString(32).substring(2);
@@ -36,14 +35,14 @@ function Taskinput({ history }) {
     //taskみたいなものを入れておく配列
     const [todos, setTodo] = useState([]);
     //タスク名の変数
-    const [task, setTask] = useState('')
+    const [taskName, setTaskName] = useState('')
 
     const handleNewTask = (event) => {
-        setTask(event.target.value)
+        setTaskName(event.target.value)
     }
 
     //タスクにかかる時間について
-    const [time, setTime] = useState('1h')
+    const [requiredTime, setRequiredTime] = useState('1h')
 
     /*  const options = [
  
@@ -53,7 +52,7 @@ function Taskinput({ history }) {
 
 
 
-    console.log(time)
+    console.log(requiredTime)
     //taskにかかる時間のselect
     const dead_Time = [
         { value: "1", label: "1h", id: "1", },
@@ -67,11 +66,11 @@ function Taskinput({ history }) {
 
     //想定される時間の関数
     const Change = e => {
-        setTime(e.target.value)
+        setRequiredTime(e.target.value)
     }
 
 
-    let slicetime = time.slice(0, 1)
+    let slicetime = requiredTime.slice(0, 1)
     let getSlicetime = slicetime * 3600000
     //taskの締め切りについて
     const deadTask = dead_Time.map(deadtask => {
@@ -80,11 +79,11 @@ function Taskinput({ history }) {
         )
     })
     //締め切りの日にち
-    const [dead, setDead] = useState('')
+    const [deadline, setDeadLine] = useState('')
     //今日の日にちから締め切りまでの日数を計算
     let today = new Date()
     let nowdate = today.getTime()
-    let deadTime = Date.parse(new Date(dead))
+    let deadTime = Date.parse(new Date(deadline))
     let differdate = deadTime - nowdate - getSlicetime
 
     //削除ボタンと詳細ボタンの表示を決めておく変数
@@ -95,16 +94,36 @@ function Taskinput({ history }) {
     const [arr, setArr] = useState('')
 
     /*     const [message, setMessage] = useState(initialState) */
+    const nanoinad = nanoid()
+    console.log(typeof (nanoinad))
 
+    console.log(typeof (taskName))
+
+    const random = Math.floor(Math.random() * 53);
+    console.log(random)
     //plusbuttonクリック時のイベント
-    const handleSubmit = (event) => {
-        event.preventDefault()
+    const handleSubmit = (e) => {
+        e.preventDefault()
         setClassAdd(true)
         setClassDetail(true)
-        if (task === '') return
-        const tmpTodo = [...todos, { task, time, dead, arr: differdate,/*  message: `${year}`"年", */ isCompleted: false, done: false, id: nanoid.generate() }]
+        if (taskName === '') return
+        if (deadline === '') return
+        const tmpTodo = [...todos, { taskName, requiredTime, deadline, arr: differdate,/*  message: `${year}`"年", */ isCompleted: false, done: false, id: nanoid() }]
+        console.log(typeof (tmpTodo.id))
 
-        setTask('')
+        //firestoreに保存する
+
+        firebase.firestore().collection('tasks').add({
+            name: taskName,
+            deadline: deadline,
+            requiredTime: requiredTime,
+            /* isCompleted: false, */
+            id: tmpTodo.id,
+
+        })
+
+        /* .doc('xJChN3VORCrnp7Ih1GvF') */
+        setTaskName('')
         setArr(tmpTodo)
         tmpTodo.sort(function (a, b) {
             console.log(a.arr)
@@ -122,11 +141,13 @@ function Taskinput({ history }) {
     }
 
 
+
+
     //checkboxを反転させる関数
     const handleCheck = (checked) => {
         const checkedTodos = todos.map(todo => {
             if (todo.key === checked.key) {
-                todo.done = !todo.done
+                todo.isCompleted = !todo.isCompleted
             }
             return todo
         })
@@ -147,7 +168,7 @@ function Taskinput({ history }) {
 
 
 
-    console.log(Date.parse(new Date(dead)))
+    console.log(Date.parse(new Date(deadline)))
 
     return (
         <>
@@ -159,7 +180,7 @@ function Taskinput({ history }) {
 
                 <div>
                     <form >
-                        Add Task : <input value={task} placeholder="Add New Task" onChange={handleNewTask} />
+                        Add Task : <input value={taskName} placeholder="Add New Task" onChange={handleNewTask} />
 
                     </form>
                 </div>
@@ -176,8 +197,8 @@ function Taskinput({ history }) {
                 <div>
 
                     <input type="date"
-                        onChange={e => setDead(e.target.value)} />
-                    <div>{dead}</div>
+                        onChange={e => setDeadLine(e.target.value)} />
+                    <div>{deadline}</div>
                 </div>
                 <div><Button clicked={handleSubmit} /></div>
             </div>
