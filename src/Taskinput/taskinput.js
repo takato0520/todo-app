@@ -13,12 +13,7 @@ const getKey = () => Math.random().toString(32).substring(2);
 
 function Taskinput({ history }) {
 
-    /* const [text, setText] = useState() */ //textareaの内容
-    //firestoreから読み込んだtextarea
-    /* useEffect(() => {
-        firebase.firestore().collection('tasks').doc('xJChN3VORCrnp7Ih1GvF').get()
-            .then(text => { setText(text.data().detail) })
-    }, []) */
+
 
 
 
@@ -101,14 +96,17 @@ function Taskinput({ history }) {
 
     const random = Math.floor(Math.random() * 53);
     console.log(random)
+    const [id, setId] = useState(nanoid())
     //plusbuttonクリック時のイベント
     const handleSubmit = (e) => {
         e.preventDefault()
+        setId(nanoid())
         setClassAdd(true)
         setClassDetail(true)
         if (taskName === '') return
         if (deadline === '') return
-        const tmpTodo = [...todos, { taskName, requiredTime, deadline, arr: differdate,/*  message: `${year}`"年", */ isCompleted: false, done: false, id: nanoid() }]
+
+        const tmpTodo = [...todos, { taskName, requiredTime, deadline, arr: differdate,/*  message: `${year}`"年", */ isCompleted: false, done: false, id: id }]
         console.log(typeof (tmpTodo.id))
 
         //firestoreに保存する
@@ -117,12 +115,12 @@ function Taskinput({ history }) {
             name: taskName,
             deadline: deadline,
             requiredTime: requiredTime,
-            /* isCompleted: false, */
-            id: tmpTodo.id,
+            isCompleted: false,
+            id: id,
 
         })
 
-        /* .doc('xJChN3VORCrnp7Ih1GvF') */
+
         setTaskName('')
         setArr(tmpTodo)
         tmpTodo.sort(function (a, b) {
@@ -208,12 +206,12 @@ function Taskinput({ history }) {
                         <div className={classes.tasklist}>
                             <input
                                 type="checkbox"
-                                checked={todo.done}
+                                checked={todo.inCompleted}
                                 onChange={handleCheck}
                             />
-                            <Item key={getKey()}>{todo.task} </Item>
-                            <Item key={getKey()}>{todo.time}</Item>
-                            <Item key={getKey()}>{todo.dead}</Item>
+                            <Item key={getKey()}>{todo.taskName} </Item>
+                            <Item key={getKey()}>{todo.requiredTime}</Item>
+                            <Item key={getKey()}>{todo.deadline}</Item>
                             {/* <li key={getKey()}>締め切りまで{todo.message}</li> */}
                             <Buttontask
                                 className={classDetail ? classes.play : classes.none}
@@ -229,9 +227,7 @@ function Taskinput({ history }) {
 
 
             </ul>
-            <input type="button"
-                value="履歴画面へ"
-                onClick={moveToTaskComp} />
+
         </>
     );
 }

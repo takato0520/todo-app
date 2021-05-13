@@ -1,11 +1,5 @@
 const TaskHistory = ({ history }) => {
-    const returnButton = () => {
-        history.push('/')
-    }
-    return (
-        <button onClick={returnButton}>戻る</button>
-
-    )
+    return (null)
 }
 
 export default TaskHistory
