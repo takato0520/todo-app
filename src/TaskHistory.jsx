@@ -2,16 +2,17 @@ import styled from 'styled-components'
 import { useState, useEffect } from 'react'
 import CompletedTask from './CompletedTask'
 
+
 const TaskHistory = ({ getTasks }) => {
 
     const [completedTasks, setCompletedTask] = useState([])
-
     useEffect(() => {
-        setCompletedTask(getTasks.filter(task => task.isCompleted === true))
+        if (getTasks) setCompletedTask(getTasks.filter(task => task.isCompleted === true))
     }
-        , [])
+        , [getTasks])
 
     console.log(completedTasks)
+    console.log(getTasks)
 
     return (
         <>
