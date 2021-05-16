@@ -53,7 +53,7 @@ function App() {
           <Route exact path='/' component={Taskinput} getTasks={getTasks} />
           <Route exact path='/login' component={Login} />
           <Route exact path='/signup' component={SignUp} />
-          <Route exact path='/taskDetail'>
+          <Route exact path='/taskDetail/:id'>
             < TaskDetail getTasks={getTasks} />
           </Route>
           <Route exact path='/taskHistory' >

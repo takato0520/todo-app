@@ -2,23 +2,24 @@ import { useEffect, useState } from 'react'
 import firebase from './config/firebase'
 import 'firebase/firestore'
 import styled from 'styled-components'
+import { useParams } from 'react-router-dom'
 
 const TaskDetail = ({ history }) => {
-
+    const { id } = useParams()
     const [text, setText] = useState() //textareaの内容
     const [isChanged, setIsChanged] = useState(false) //textに変更があったかどうか判定する値
 
     //前保存したテキストをtextareaに返す処理　*Roomを開いた時にロードした方が良いと思う
     useEffect(() => {
-        firebase.firestore().collection('tasks').doc('xJChN3VORCrnp7Ih1GvF').get()
-            .then(text => { setText(text.data().detail) })
+        firebase.firestore().collection('tasks').doc(id).get()
+            .then(text => { setText(text.data()) })
     }, [])
 
 
     //テキストをFirebaseに保存する関数　*docの値を変数にする
     const saveTextData = (e) => {
         e.preventDefault()
-        firebase.firestore().collection('tasks').doc('xJChN3VORCrnp7Ih1GvF').update({
+        firebase.firestore().collection('tasks').doc(id).update({
             detail: text
         })
         setIsChanged(false)
@@ -45,12 +46,12 @@ const TaskDetail = ({ history }) => {
 
     return (
         <>
-            <h1>タスク名</h1>
-            <div>期限</div>
-            <div>かかる時間</div>
+            <h1>タスク名:{text?.name}</h1>
+            <div>期限:{text?.deadline}</div>
+            <div>かかる時間:{text?.requiredTime}</div>
             <h2>タスクの詳細</h2>
             <Textarea
-                value={text}
+                value={text?.detail}
                 onChange={
                     e => {
                         setText(e.target.value)
