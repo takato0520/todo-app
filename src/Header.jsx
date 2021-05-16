@@ -1,12 +1,18 @@
 import React from 'react'
 import styled from 'styled-components'
+import { withRouter } from 'react-router-dom'
 
-const Header = () => {
+const Header = ({ history }) => {
+
+    const taskCompleted = (e) => {
+        history.push("/taskHistory");
+    }
     return (
         <Ul>
             <Li>mycalender</Li>
             <Li>通知設定</Li>
             <Li>logout</Li>
+            <Li onClick={taskCompleted}>履歴画面</Li>
         </Ul>
     )
 
@@ -26,4 +32,4 @@ const Ul = styled.ul`
     margin: 0;
 `
 
-export default Header;
+export default withRouter(Header);

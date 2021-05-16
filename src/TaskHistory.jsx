@@ -1,4 +1,4 @@
-const TaskHistory = () => {
+const TaskHistory = ({ history }) => {
     return (null)
 }
 

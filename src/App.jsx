@@ -1,6 +1,5 @@
 import React from 'react'
 import { BrowserRouter as Switch, Route, withRouter } from "react-router-dom"
-import Room from './Room'
 import Login from './Login'
 import SignUp from './SignUp'
 import TaskDetail from './TaskDetail'
@@ -12,7 +11,7 @@ import firebase from './config/firebase'
 import 'firebase/firestore'
 
 function App() {
-  
+
   // firestoreからdate取得するコードです
  
 
@@ -42,7 +41,7 @@ function App() {
     
   
 
-        
+
 
 
   return (
@@ -51,14 +50,15 @@ function App() {
       <Header />
       <withRouter>
         <Switch>
-          <Route exact path='/' component={Room} />
+          <Header />
+          <Route exact path='/' component={Taskinput} />
           <Route exact path='/login' component={Login} />
           <Route exact path='/signup' component={SignUp} />
-          <Route exact path='/taskDetail' component={TaskDetail} getTasks={getTasks} />
-          <Route exact path='/taskHistory' component={TaskHistory} getTasks={getTasks} />
+          <Route exact path='/taskDetail'
+            component={TaskDetail} />
+          <Route exact path='/taskHistory' component={TaskHistory} />
         </Switch>
       </withRouter>
-      <Taskinput getTasks={getTasks} />
     </>
   )
 }
