@@ -2,25 +2,41 @@ import { useEffect, useState } from 'react'
 import firebase from './config/firebase'
 import 'firebase/firestore'
 import styled from 'styled-components'
+import { useParams } from 'react-router-dom'
 
 const TaskDetail = ({ history }) => {
-
+    const { id } = useParams()
     const [text, setText] = useState() //textareaの内容
-    const [alerm, setAlerm] = useState(false) //textに変更があったかどうか判定する値
+    const [isChanged, setIsChanged] = useState(false) //textに変更があったかどうか判定する値
 
     //前保存したテキストをtextareaに返す処理　*Roomを開いた時にロードした方が良いと思う
     useEffect(() => {
-        firebase.firestore().collection('tasks').doc('xJChN3VORCrnp7Ih1GvF').get()
+        firebase.firestore().collection('tasks').doc(id).get()
             .then(text => { setText(text.data()) })
     }, [])
 
 
+    //テキストをFirebaseに保存する関数　*docの値を変数にする
+    const saveTextData = (e) => {
+        e.preventDefault()
+        firebase.firestore().collection('tasks').doc(id).update({
+            detail: text
+        })
+        setIsChanged(false)
+    }
+
+    //テキストの削除をする関数
+    const deleteText = (e) => {
+        e.preventDefault()
+        setText("")
+        setIsChanged(true)
+    }
 
     //Roomコンポーネントへ移動する関数
     //textareaの内容に変更があった時内容を保存するか確認する
     const moveToRoom = (e) => {
         e.preventDefault()
-        if (alerm) {
+        if (isChanged) {
             if (window.confirm('内容に変更があります。保存しますか?')) {
                 saveTextData(e)
             }
@@ -28,35 +44,18 @@ const TaskDetail = ({ history }) => {
         history.push("/")
     }
 
-    //テキストをFirebaseに保存する関数
-    const saveTextData = (e) => {
-        e.preventDefault()
-        firebase.firestore().collection('tasks').doc('xJChN3VORCrnp7Ih1GvF').update({
-            detail: text
-        })
-        setAlerm(false)
-    }
-
-    //テキストの削除をする関数
-    const deleteText = (e) => {
-        e.preventDefault()
-        setText("")
-        setAlerm(true)
-    }
-
-
     return (
         <>
-            <h1>タスク名</h1>
-            <div>期限</div>
-            <div>かかる時間</div>
+            <h1>タスク名:{text?.name}</h1>
+            <div>期限:{text?.deadline}</div>
+            <div>かかる時間:{text?.requiredTime}</div>
             <h2>タスクの詳細</h2>
             <Textarea
-                value={text}
+                value={text?.detail}
                 onChange={
                     e => {
                         setText(e.target.value)
-                        setAlerm(true)
+                        setIsChanged(true)
                     }
                 }
             />
@@ -83,6 +82,7 @@ cursor:pointer;
 
 
 const ButtonWrap = styled.div`
+
 `
 
 

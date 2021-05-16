@@ -40,14 +40,14 @@ function Taskinput({ history }) {
     const [requiredTime, setRequiredTime] = useState('1h')
 
     /*  const options = [
- 
+
      ] */
 
 
 
 
 
-    console.log(requiredTime)
+
     //taskにかかる時間のselect
     const dead_Time = [
         { value: "1", label: "1h", id: "1", },
@@ -166,20 +166,14 @@ function Taskinput({ history }) {
 
 
 
-    console.log(Date.parse(new Date(deadline)))
 
     return (
         <>
-            {/* <TaskDetail
-                text={text}
-                save={saveTextData}
-                delete={deleteText} /> */}
             <div className={classes.todolist}>
 
                 <div>
                     <form >
                         Add Task : <input value={taskName} placeholder="Add New Task" onChange={handleNewTask} />
-
                     </form>
                 </div>
 
@@ -252,4 +246,3 @@ margin-left: 20px;
 `
 
 export default withRouter(Taskinput)
-
