@@ -1,18 +1,30 @@
 import React from 'react'
 import styled from 'styled-components'
-import { withRouter } from 'react-router-dom'
+import { useHistory, useLocation } from 'react-router-dom'
 
-const Header = ({ history }) => {
+const Header = () => {
+    const history = useHistory()
+    const location = useLocation()
 
-    const taskCompleted = (e) => {
+    const moveToTaskHistory = () => {
         history.push("/taskHistory");
     }
+
+    const moveToRoom = () => {
+        history.push("/");
+    }
+
+    console.log(location)
+
     return (
         <Ul>
             <Li>mycalender</Li>
             <Li>通知設定</Li>
             <Li>logout</Li>
-            <Li onClick={taskCompleted}>履歴画面</Li>
+            {(location.pathname === "/") ?
+                <Li onClick={moveToTaskHistory}>履歴</Li>
+                : <Li onClick={moveToRoom}>戻る</Li>}
+
         </Ul>
     )
 
@@ -22,7 +34,7 @@ const Li = styled.li`
     list-style : none;
     padding: 0 30px;
     cursor: pointer;
-    
+
 `
 
 const Ul = styled.ul`
@@ -32,4 +44,4 @@ const Ul = styled.ul`
     margin: 0;
 `
 
-export default withRouter(Header);
+export default Header;

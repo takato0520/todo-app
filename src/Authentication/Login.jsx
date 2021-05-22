@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react'
 import { Redirect } from 'react-router-dom'
 import { AuthContext } from './AuthService'
-import firebase from './config/firebase'
+import firebase from '../config/firebase'
 import styled from 'styled-components'
 
 const Login = ({ history }) => {

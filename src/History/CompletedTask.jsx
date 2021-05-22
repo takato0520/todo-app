@@ -1,37 +1,38 @@
 import styled from 'styled-components'
-import firebase from './config/firebase'
+import firebase from '../config/firebase'
 import 'firebase/firestore'
-import { withRouter, useHistory } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 
 
 const CompletedTask = ({ completedTask }) => {
 
     const history = useHistory()
-    console.log(completedTask.key)
-    console.log(firebase.firestore().collection('tasks').doc(completedTask.key))
-    console.log(firebase.firestore().collection('tasks').doc('7v3fqv9S3OHmp93fLl4N'))
+    const id = completedTask.id
 
-    const moveToDetail = () => {
-        history.push(`/taskDetail/${completedTask.key}`)
+    //詳細画面に遷移する処理
+    const moveToDetail = (id) => {
+        history.push(`/taskDetail/${id}`)
 
     }
 
+    //メイン画面にtaskを再表示する処理
     const restoreTask = () => {
-        const docRef = firebase.firestore().collection('tasks').doc(completedTask.key)
+        const docRef = firebase.firestore().collection('tasks').doc(id)
         docRef.update({
             isCompleted: false
         })
     }
 
+    //履歴画面からtaskを削除する処理（DBから完全に消去する処理）
     const deleteTask = () => {
-        firebase.firestore().collection('tasks').doc(completedTask.key)
+        firebase.firestore().collection('tasks').doc(id)
             .delete()
     }
 
 
     return (
         <TaskWrap>
-            <h2>{completedTask.name}</h2>
+            <h2>{completedTask.taskName}</h2>
             <Item>タスクにかかる時間:{completedTask.requiredTime}</Item>
             <Item>タスクの期日:{completedTask.deadline}</Item>
             <Button onClick={moveToDetail}>詳細</Button>
@@ -56,4 +57,4 @@ background-color:yellow;
 width:100px;
 cursor:pointer;
 `
-export default withRouter(CompletedTask)
+export default CompletedTask

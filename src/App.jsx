@@ -1,31 +1,19 @@
 import React, { useState, useEffect } from 'react'
-import { BrowserRouter as Switch, Route, withRouter } from "react-router-dom"
-import Login from './Login'
-import SignUp from './SignUp'
+import { BrowserRouter as Switch, Route } from "react-router-dom"
+import Login from './Authentication/Login'
+import SignUp from './Authentication/SignUp'
 import TaskDetail from './TaskDetail'
-import TaskHistory from './TaskHistory'
+import TaskHistory from './History/TaskHistory'
 import Header from './Header'
-import Taskinput from './Taskinput/taskinput'
+import Taskinput from './Room/Room'
 import firebase from './config/firebase'
 import 'firebase/firestore'
 
 function App() {
 
-  // firestoreからdate取得するコードです
-
-
-  // const getTasks = () => {
-  //   firebase.firestore().collection('tasks')
-  //     .onSnapshot((snapshot) => {
-  //       const tasks = snapshot.docs.map(doc => {
-
-  //         return doc.data()
-  //       })
-  //       console.log(tasks)
-  //     });
-  // }
   const [getTasks, setGetTasks] = useState()
 
+  //読み込み時にfirestoreからtasksを呼び出す処理
   useEffect(() => {
     firebase.firestore().collection('tasks')
       .onSnapshot((snapshot) => {
@@ -37,28 +25,24 @@ function App() {
       });
   }, [])
 
-
-
-
-
-
   return (
     <>
-      {/* <button　onClick= {getTasks}>取得</button> データが取得されているかの確認するボタンです。（テスト用） */}
-      <Header />
-      <withRouter>
-        <Switch>
-          <Route exact path='/' component={Taskinput} getTasks={getTasks} />
-          <Route exact path='/login' component={Login} />
-          <Route exact path='/signup' component={SignUp} />
-          <Route exact path='/taskDetail/:id'>
-            < TaskDetail getTasks={getTasks} />
-          </Route>
-          <Route exact path='/taskHistory' >
-            <TaskHistory getTasks={getTasks} />
-          </Route>
-        </Switch>
-      </withRouter>
+
+      <Switch>
+        <Header />
+        <Route exact path='/' >
+          <Taskinput getTasks={getTasks} />
+        </Route>
+        <Route exact path='/login' component={Login} />
+        <Route exact path='/signup' component={SignUp} />
+        <Route exact path='/taskDetail/:id'>
+          < TaskDetail getTasks={getTasks} />
+        </Route>
+        <Route exact path='/taskHistory' >
+          <TaskHistory getTasks={getTasks} />
+        </Route>
+      </Switch>
+
     </>
   )
 }
