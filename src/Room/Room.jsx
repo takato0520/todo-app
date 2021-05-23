@@ -24,7 +24,7 @@ const Room = ({ getTasks }) => {
         , [getTasks])
 
     useEffect(() => {
-        sortTasks(getTasks)
+        sortTasks(tasks)
     }, [tasks])
 
     //ボタンの処理
@@ -65,7 +65,7 @@ const Room = ({ getTasks }) => {
     /*    console.log(today) */
     let classAdd = true
 
-    //plusbuttonを押した時にtaskを追加し、優先順に並び替える処理
+    //plusbuttonを押した時、DBにtaskを追加する処理
     const addNewTask = (event) => {
         event.preventDefault()
 
