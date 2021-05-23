@@ -5,7 +5,7 @@ import SignUp from './Authentication/SignUp'
 import TaskDetail from './TaskDetail'
 import TaskHistory from './History/TaskHistory'
 import Header from './Header'
-import Taskinput from './Room/Room'
+import Room from './Room/Room'
 import firebase from './config/firebase'
 import 'firebase/firestore'
 
@@ -31,7 +31,7 @@ function App() {
       <Switch>
         <Header />
         <Route exact path='/' >
-          <Taskinput getTasks={getTasks} />
+          <Room getTasks={getTasks} />
         </Route>
         <Route exact path='/login' component={Login} />
         <Route exact path='/signup' component={SignUp} />

@@ -9,17 +9,23 @@ import { useHistory } from 'react-router-dom'
 
 const getKey = () => Math.random().toString(32).substring(2);
 
-function Taskinput({ getTasks }) {
+const Room = ({ getTasks }) => {
     const history = useHistory()
-    const [todos, setTodos] = useState()
+    const [tasks, setTasks] = useState()
     const [taskName, setTaskName] = useState('')
     const [requiredTime, setRequiredTime] = useState('1h')
     const [deadline, setDeadline] = useState('')
 
     useEffect(() => {
-        if (getTasks) setTodos(getTasks.filter(task => task.isCompleted === false))
+        if (getTasks) {
+            setTasks(getTasks.filter(task => task.isCompleted === false))
+        }
     }
         , [getTasks])
+
+    useEffect(() => {
+        sortTasks(getTasks)
+    }, [tasks])
 
     //ボタンの処理
     //詳細ボタンを押した時に詳細画面に遷移する処理
@@ -37,7 +43,23 @@ function Taskinput({ getTasks }) {
         { value: "6", label: "6h", id: "6", }
     ]
 
+    const sortTasks = (tmpTasks) => {
+        //今の時間を取得し、msecに変換する
+        const today = new Date()
+        const now_msec = today.getTime()
 
+        tmpTasks?.forEach(tmpTask => (
+            //taskの優先順位を決める指標　締切までの時間-taskにかかる時間=締切日-今の時間-taskにかかる時間
+            tmpTask.difference = Date.parse(new Date(tmpTask.deadline)) - now_msec - tmpTask.requiredTime.slice(0, 1) * 3600000
+        ))
+
+        console.log(tmpTasks)
+
+        tmpTasks?.sort((a, b) =>
+            a.difference - b.difference
+        )
+        setTasks(tmpTasks)
+    }
 
 
     /*    console.log(today) */
@@ -47,22 +69,9 @@ function Taskinput({ getTasks }) {
     const addNewTask = (event) => {
         event.preventDefault()
 
-        //timeの数字部分だけを取り出して単位をmsに変換する
-        const requiredTime_sliced_msec = requiredTime.slice(0, 1) * 3600000
-
-        //締め切りの日にち管理する
-        let today = new Date()
-        let now_msec = today.getTime()
-        let deadline_msec = Date.parse(new Date(deadline))
-
-        //taskの優先順位を決める指標　締切までの時間-taskにかかる時間
-        let differdate = deadline_msec - now_msec - requiredTime_sliced_msec
-
         const id = nanoid()
 
         classAdd = true
-
-        const tmpTodo = [...todos, { taskName, requiredTime, deadline, arr: differdate, isCompleted: false }]
 
         firebase.firestore().collection('tasks').doc(id).set({
             taskName: taskName,
@@ -72,19 +81,13 @@ function Taskinput({ getTasks }) {
             id: id,
 
         })
-        tmpTodo.sort(function (a, b) {
-            console.log(a.arr)
-            if (a.arr < b.arr) {
-                return -1;
-            }
-            if (a.arr > b.arr) {
-                return 1
-            }
-            return 0;
-        })
 
-        setTodos(tmpTodo)
+        // const tmpTasks = [...tasks, { taskName, requiredTime, deadline, isCompleted: false }]
+
+        // sortTasks(tmpTasks)
+
         setTaskName('')
+        setRequiredTime('')
         setDeadline('')
     }
 
@@ -93,9 +96,12 @@ function Taskinput({ getTasks }) {
         firebase.firestore().collection('tasks').doc(id).update({
             isCompleted: true
         })
-        // const newTodos = [...todos]
-        // newTodos.splice(index, 1)
-        // setTodo(newTodos)
+
+        // const newTasks = [...tasks]
+        // newTasks.isCompleted = true
+        // sortTasks(newTasks)
+        // setTasks(newTasks)
+
 
     }
 
@@ -131,16 +137,16 @@ function Taskinput({ getTasks }) {
             <ul>
                 <TaskWrap>
                     {
-                        todos?.map((todo) => (
+                        tasks?.map((task) => (
                             <div className={classes.tasklist}>
-                                <Item key={getKey()}>{todo.taskName} </Item>
-                                <Item key={getKey()}>{todo.requiredTime}</Item>
-                                <Item key={getKey()}>{todo.deadline}</Item>
-                                <Buttontask onClick={() => moveToTaskDetail(todo.id)}>詳細</Buttontask>
+                                <Item key={getKey()}>{task.taskName} </Item>
+                                <Item key={getKey()}>{task.requiredTime}</Item>
+                                <Item key={getKey()}>{task.deadline}</Item>
+                                <Buttontask onClick={() => moveToTaskDetail(task.id)}>詳細</Buttontask>
                                 <input
                                     className={classAdd ? classes.play : classes.none}
                                     type="button"
-                                    onClick={() => handleRemoveTask(todo.id)}
+                                    onClick={() => handleRemoveTask(task.id)}
                                     value="削除" />
                             </div>
                         ))
@@ -171,4 +177,4 @@ margin-top: 30px;
 margin-left: 20px;
 `
 
-export default Taskinput
+export default Room

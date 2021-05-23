@@ -14,18 +14,24 @@ const Header = () => {
         history.push("/");
     }
 
-    console.log(location)
+    const moveToLogin = () => {
+        history.push("login")
+    }
 
     return (
-        <Ul>
-            <Li>mycalender</Li>
-            <Li>通知設定</Li>
-            <Li>logout</Li>
-            {(location.pathname === "/") ?
-                <Li onClick={moveToTaskHistory}>履歴</Li>
-                : <Li onClick={moveToRoom}>戻る</Li>}
+        <>
+            {(location.pathname === "/" || location.pathname === "/taskHistory") ?
+                < Ul >
+                    <Li onClick={moveToLogin}>logout</Li>
+                    {
+                        (location.pathname === "/") ?
+                            <Li onClick={moveToTaskHistory}>履歴</Li>
+                            : <Li onClick={moveToRoom}>戻る</Li>
+                    }
 
-        </Ul>
+                </Ul > : <></>
+            }
+        </>
     )
 
 }
