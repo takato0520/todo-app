@@ -17,8 +17,8 @@ const CompletedTask = ({ completedTask }) => {
 
     //メイン画面にtaskを再表示する処理
     const restoreTask = () => {
-        const docRef = firebase.firestore().collection('tasks').doc(id)
-        docRef.update({
+        firebase.firestore().collection('tasks').doc(id)
+        .update({
             isCompleted: false
         })
     }

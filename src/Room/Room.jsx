@@ -19,12 +19,14 @@ const Room = ({ getTasks }) => {
     useEffect(() => {
         if (getTasks) {
             setTasks(getTasks.filter(task => task.isCompleted === false))
+            console.log(getTasks)
+            console.log(tasks)
         }
     }
         , [getTasks])
 
     useEffect(() => {
-        sortTasks(tasks)
+        if (tasks) sortTasks(tasks)
     }, [tasks])
 
     //ボタンの処理
@@ -58,6 +60,7 @@ const Room = ({ getTasks }) => {
         tmpTasks?.sort((a, b) =>
             a.difference - b.difference
         )
+
         setTasks(tmpTasks)
     }
 
@@ -104,6 +107,9 @@ const Room = ({ getTasks }) => {
 
 
     }
+
+    console.log(getTasks)
+    console.log(tasks)
 
     return (
         <>

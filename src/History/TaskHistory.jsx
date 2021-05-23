@@ -6,6 +6,7 @@ import CompletedTask from './CompletedTask'
 const TaskHistory = ({ getTasks }) => {
 
     const [completedTasks, setCompletedTask] = useState([])
+
     useEffect(() => {
         if (getTasks) setCompletedTask(getTasks.filter(task => task.isCompleted === true))
     }
