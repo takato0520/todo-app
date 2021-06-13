@@ -8,6 +8,7 @@ import Header from './Header'
 import Room from './Room/Room'
 import firebase from './config/firebase'
 import 'firebase/firestore'
+import { Reset } from 'styled-reset'
 
 function App() {
 
@@ -27,6 +28,7 @@ function App() {
 
   return (
     <>
+      <Reset />
 
       <Switch>
         <Header />

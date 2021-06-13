@@ -1,13 +1,9 @@
-import classes from './taskinput.module.css'
 import React, { useEffect, useState } from 'react';
-import Button from './button'
 import styled from 'styled-components';
 import firebase from '../config/firebase'
 import 'firebase/firestore'
 import { nanoid } from 'nanoid';
 import { useHistory } from 'react-router-dom'
-
-const getKey = () => Math.random().toString(32).substring(2);
 
 const Room = ({ getTasks }) => {
     const history = useHistory()
@@ -64,17 +60,11 @@ const Room = ({ getTasks }) => {
         setTasks(tmpTasks)
     }
 
-
-    /*    console.log(today) */
-    let classAdd = true
-
     //plusbuttonを押した時、DBにtaskを追加する処理
     const addNewTask = (event) => {
         event.preventDefault()
 
         const id = nanoid()
-
-        classAdd = true
 
         firebase.firestore().collection('tasks').doc(id).set({
             taskName: taskName,
@@ -84,10 +74,6 @@ const Room = ({ getTasks }) => {
             id: id,
 
         })
-
-        // const tmpTasks = [...tasks, { taskName, requiredTime, deadline, isCompleted: false }]
-
-        // sortTasks(tmpTasks)
 
         setTaskName('')
         setRequiredTime('')
@@ -100,12 +86,6 @@ const Room = ({ getTasks }) => {
             isCompleted: true
         })
 
-        // const newTasks = [...tasks]
-        // newTasks.isCompleted = true
-        // sortTasks(newTasks)
-        // setTasks(newTasks)
-
-
     }
 
     console.log(getTasks)
@@ -113,18 +93,19 @@ const Room = ({ getTasks }) => {
 
     return (
         <>
-            <div className={classes.todolist}>
+            <div >
                 <div>
-                    Add Task : <input value={taskName} placeholder="Add New Task"
+                    <div>件名</div>
+                    <input value={taskName} placeholder="Add New Task"
                         onChange={e => { setTaskName(e.target.value) }} />
                 </div>
 
                 <div>
-                    <p>想定される時間</p>
+                    <div>所用時間</div>
                     <select onChange={e => setRequiredTime(e.target.value)}>
                         {requiredTime_Options.map(requiredTime => {
                             return (
-                                <option key={requiredTime.value}>{requiredTime.id}h</option>
+                                <option key={requiredTime.value}>{requiredTime.id}min</option>
                             )
                         })}
                     </select>
@@ -132,26 +113,24 @@ const Room = ({ getTasks }) => {
 
                 </div>
                 <div>
-                    <input type="date"
+                    <input type="datetime"
                         onChange={e => setDeadline(e.target.value)} />
                     <div>{deadline}</div>
                 </div>
                 <div>
-                    <Button clicked={addNewTask} />
+                    <button onClick={addNewTask} />
                 </div>
             </div>
             <ul>
                 <TaskWrap>
                     {
                         tasks?.map((task) => (
-                            <div className={classes.tasklist}>
-                                <Item key={getKey()}>{task.taskName} </Item>
-                                <Item key={getKey()}>{task.requiredTime}</Item>
-                                <Item key={getKey()}>{task.deadline}</Item>
+                            <div >
+                                <Item >{task.taskName} </Item>
+                                <Item >{task.requiredTime}</Item>
+                                <Item >{task.deadline}</Item>
                                 <Buttontask onClick={() => moveToTaskDetail(task.id)}>詳細</Buttontask>
                                 <input
-                                    className={classAdd ? classes.play : classes.none}
-                                    type="button"
                                     onClick={() => handleRemoveTask(task.id)}
                                     value="削除" />
                             </div>
