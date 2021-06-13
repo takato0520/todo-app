@@ -83,7 +83,10 @@ cursor:pointer;
 
 
 const ButtonWrap = styled.div`
-
+    :hover{
+        opacity:0.8;
+        color:#0066FF;
+    }
 `
 
 

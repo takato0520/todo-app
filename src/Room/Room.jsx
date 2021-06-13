@@ -4,26 +4,28 @@ import firebase from '../config/firebase'
 import 'firebase/firestore'
 import { nanoid } from 'nanoid';
 import { useHistory } from 'react-router-dom'
+import DeleteIcon from '@material-ui/icons/Delete';
+import AddCircleIcon from '@material-ui/icons/AddCircle';
+import dayjs from 'dayjs'
 
 const Room = ({ getTasks }) => {
     const history = useHistory()
     const [tasks, setTasks] = useState()
     const [taskName, setTaskName] = useState('')
-    const [requiredTime, setRequiredTime] = useState('1h')
+    const [requiredTime, setRequiredTime] = useState('0')
     const [deadline, setDeadline] = useState('')
+    const [isInputTaskName, setIsInputTaskName] = useState(true)
+    const [isInputRequiredTime, setIsInputRequiredTime] = useState(true)
+    const [isInputDeadline, setIsInputDeadline] = useState(true)
 
     useEffect(() => {
         if (getTasks) {
-            setTasks(getTasks.filter(task => task.isCompleted === false))
+            sortTasks(getTasks.filter(task => task.isCompleted === false))
             console.log(getTasks)
             console.log(tasks)
         }
     }
         , [getTasks])
-
-    useEffect(() => {
-        if (tasks) sortTasks(tasks)
-    }, [tasks])
 
     //ボタンの処理
     //詳細ボタンを押した時に詳細画面に遷移する処理
@@ -33,12 +35,18 @@ const Room = ({ getTasks }) => {
 
     //taskにかかる時間を選択するのに必要な定数
     const requiredTime_Options = [
-        { value: "1", label: "1h", id: "1", },
-        { value: "2", label: "2h", id: "2", },
-        { value: "3", label: "3h", id: "3", },
-        { value: "4", label: "4h", id: "4", },
-        { value: "5", label: "5h", id: "5", },
-        { value: "6", label: "6h", id: "6", }
+        { value: "0" },
+        { value: "5" },
+        { value: "10" },
+        { value: "15" },
+        { value: "20" },
+        { value: "30" },
+        { value: "35" },
+        { value: "40" },
+        { value: "45" },
+        { value: "50" },
+        { value: "55" },
+        { value: "60" },
     ]
 
     const sortTasks = (tmpTasks) => {
@@ -48,7 +56,7 @@ const Room = ({ getTasks }) => {
 
         tmpTasks?.forEach(tmpTask => (
             //taskの優先順位を決める指標　締切までの時間-taskにかかる時間=締切日-今の時間-taskにかかる時間
-            tmpTask.difference = Date.parse(new Date(tmpTask.deadline)) - now_msec - tmpTask.requiredTime.slice(0, 1) * 3600000
+            tmpTask.difference = Date.parse(new Date(tmpTask.deadline)) - now_msec - tmpTask.requiredTime.slice(0, 1) * 60000
         ))
 
         console.log(tmpTasks)
@@ -66,18 +74,28 @@ const Room = ({ getTasks }) => {
 
         const id = nanoid()
 
-        firebase.firestore().collection('tasks').doc(id).set({
-            taskName: taskName,
-            deadline: deadline,
-            requiredTime: requiredTime,
-            isCompleted: false,
-            id: id,
+        !taskName ? setIsInputTaskName(false) : setIsInputTaskName(true)
+        requiredTime === '0' ? setIsInputRequiredTime(false) : setIsInputRequiredTime(true)
+        !deadline ? setIsInputDeadline(false) : setIsInputDeadline(true)
 
-        })
+        if (taskName && requiredTime !== '0' && deadline) {
 
-        setTaskName('')
-        setRequiredTime('')
-        setDeadline('')
+            firebase.firestore().collection('tasks').doc(id).set({
+                taskName: taskName,
+                deadline: deadline,
+                requiredTime: requiredTime,
+                isCompleted: false,
+                id: id,
+
+            })
+
+            setTaskName('')
+            setRequiredTime('')
+            setDeadline('')
+            setIsInputTaskName(true)
+            setIsInputRequiredTime(true)
+            setIsInputDeadline(true)
+        }
     }
 
     //削除ボタンを押した時にtaskを削除する関数
@@ -93,47 +111,65 @@ const Room = ({ getTasks }) => {
 
     return (
         <>
-            <div >
-                <div>
+            <InputBox >
+                <TaskNameBox>
                     <div>件名</div>
-                    <input value={taskName} placeholder="Add New Task"
+                    <InputTaskName value={taskName} placeholder="Add New Task"
                         onChange={e => { setTaskName(e.target.value) }} />
-                </div>
+                    <Error isInput={isInputTaskName}>件名を入力してください</Error>
+                </TaskNameBox>
 
-                <div>
-                    <div>所用時間</div>
-                    <select onChange={e => setRequiredTime(e.target.value)}>
+                <RequiredTimeBox>
+                    <div>所要時間</div>
+                    <SelectRequiredTime
+                        onChange={e => setRequiredTime(e.target.value)}
+                        value={requiredTime}>
                         {requiredTime_Options.map(requiredTime => {
                             return (
-                                <option key={requiredTime.value}>{requiredTime.id}min</option>
+                                <option key={requiredTime.value}>{requiredTime.value}</option>
                             )
                         })}
-                    </select>
+                    </SelectRequiredTime> min
+                    <Error isInput={isInputRequiredTime}>所要時間を入力してください</Error>
+                </RequiredTimeBox>
 
-
-                </div>
-                <div>
-                    <input type="datetime"
+                <DeadlineBox>
+                    <div>期日</div>
+                    <InputDeadline type="datetime-local"
+                        value={deadline}
                         onChange={e => setDeadline(e.target.value)} />
-                    <div>{deadline}</div>
-                </div>
-                <div>
-                    <button onClick={addNewTask} />
-                </div>
-            </div>
+                    <Error isInput={isInputDeadline}>期日を入力してください。</Error>
+                </DeadlineBox>
+
+                <AddCircleIconBox>
+                    < AddCircleIcon onClick={addNewTask} />
+                </AddCircleIconBox>
+            </InputBox>
+
             <ul>
+                <IndexBox>
+                    <ItemTaskName>
+                        件名
+                    </ItemTaskName>
+                    <ItemRequiredTime>
+                        所要時間
+                    </ItemRequiredTime>
+                    <ItemDeadline>
+                        期日
+                    </ItemDeadline>
+                </IndexBox>
                 <TaskWrap>
                     {
                         tasks?.map((task) => (
-                            <div >
-                                <Item >{task.taskName} </Item>
-                                <Item >{task.requiredTime}</Item>
-                                <Item >{task.deadline}</Item>
-                                <Buttontask onClick={() => moveToTaskDetail(task.id)}>詳細</Buttontask>
-                                <input
+                            <ItemBox >
+                                <ItemTaskName >{task.taskName} </ItemTaskName>
+                                <ItemRequiredTime >{task.requiredTime} min</ItemRequiredTime>
+                                <ItemDeadline >{dayjs(task.deadline).format('YYYY/MM/DD HH:mm')}</ItemDeadline>
+                                <ItemDetail onClick={() => moveToTaskDetail(task.id)}>詳細</ItemDetail>
+                                <ItemDeleteIcon
                                     onClick={() => handleRemoveTask(task.id)}
                                     value="削除" />
-                            </div>
+                            </ItemBox>
                         ))
                     }
                 </TaskWrap>
@@ -143,23 +179,94 @@ const Room = ({ getTasks }) => {
     );
 }
 
-
-
-
-
-const TaskWrap = styled.div`
-
-width: 100%;
-background-color: #C0C0C0;
+//inputエリアのstyle
+const InputBox = styled.div`
+display:flex;
+justify-content:space-between;
+margin-top:20px;
 `
+
+const TaskNameBox = styled.div`
+margin-left: 20px;
+`
+const RequiredTimeBox = styled.div`
+margin-left: 20px;
+`
+const DeadlineBox = styled.div`
+margin-left: 20px;
+`
+
+const InputTaskName = styled.input`
+box-sizing:border-box;
+border:solid 1px black;
+height:20px;
+`
+const SelectRequiredTime = styled.select`
+border:solid 1px black;
+height:20px;
+`
+const InputDeadline = styled.input`
+box-sizing:border-box;
+border:solid 1px black;
+height:20px;
+`
+const AddCircleIconBox = styled.div`
+cursor:pointer;
+margin:auto 0;
+margin-right:20px;
+`
+
+const Error = styled.div`
+color:${({ isInput }) => isInput ? 'transparent' : 'red'};
+`
+//outputエリアのstyle
+const TaskWrap = styled.div`
+width: 100%;
+`
+const IndexBox = styled.div`
+display:flex;
+align-items:center;
+margin-top:30px;
+background-color:#00CC99;
+height:70px;
+`
+
+const ItemBox = styled.div`
+height:50px;
+display:flex;
+align-items:center;
+background-color:#CCFFFF;
+margin-top:5px;
+`
+
 const Item = styled.div`
 margin-left: 20px;
-margin-top: 30px;
 `
-const Buttontask = styled.button`
 
-margin-top: 30px;
-margin-left: 20px;
+const ItemTaskName = styled(Item)`
+width:20%;
+`
+const ItemRequiredTime = styled(Item)`
+width:20%;
+`
+const ItemDeadline = styled(Item)`
+width:35%;
+`
+const ItemDetail = styled(Item)`
+width:50px;
+    :hover{
+        opacity:0.8;
+        color:#0066FF;
+    }
+`
+const ItemDeleteIcon = styled(DeleteIcon)`
+font-size:18px;
+cursor:pointer;
+    :hover{
+        opacity:0.8;
+        color:#0066FF;
+
+    }
 `
 
 export default Room

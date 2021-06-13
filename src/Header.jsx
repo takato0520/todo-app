@@ -46,8 +46,9 @@ const Li = styled.li`
 const Ul = styled.ul`
     display: flex;
     justify-content: flex-end;
-    background-color: #fff636;
-    margin: 0;
+    align-items:center;
+    background-color: #99FFCC;
+    height:30px;
 `
 
 export default Header;

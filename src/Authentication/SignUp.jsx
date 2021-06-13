@@ -67,7 +67,7 @@ const SignUp = ({ history }) => {
                     </InputWrap>
                 </Wrap>
                 <ButtonWrap>
-                    <Button style={{ marginBottom: 10 }} type='submit'>Sign Up</Button>
+                    <Button type='submit'>Sign Up</Button>
                     <Button onClick={changeSubmit}>ログインへ</Button>
                 </ButtonWrap>
             </form>
