@@ -68,60 +68,59 @@ const TaskHistory = ({ getTasks }) => {
 }
 
 const Title = styled.div`
-height:72px;
-margin-left:20px;
-pointer:30px;
-display:flex;
-align-items:center;
+    height:72px;
+    margin-left:20px;
+    pointer:30px;
+    display:flex;
+    font-size:30px;
+    align-items:center;
 `
 
 //outputエリアのstyle
-const TaskWrap = styled.div`
-width: 100%;
-`
 const IndexBox = styled.div`
-display:flex;
-align-items:center;
-margin-top:30px;
-background-color:#00CC99;
-height:70px;
+    display:flex;
+    align-items:center;
+    margin-top:30px;
+    background-color:#00CC99;
+    height:70px;
 `
 
 const ItemBox = styled.div`
-height:50px;
-display:flex;
-align-items:center;
-background-color:#CCFFFF;
-margin-top:5px;
+    height:50px;
+    display:flex;
+    align-items:center;
+    background-color:#CCFFFF;
+    margin-top:5px;
 `
 
 const Item = styled.div`
-margin-left: 20px;
+    margin-left: 20px;
 `
 
 const ItemTaskName = styled(Item)`
-width:20%;
+    width:20%;
 `
 const ItemRequiredTime = styled(Item)`
-width:20%;
+    width:20%;
 `
 const ItemDeadline = styled(Item)`
-width:35%;
+    width:35%;
 `
 const ItemDetail = styled(Item)`
-width:50px;
-    :hover{
-        opacity:0.8;
-        color:#0066FF;
-    }
+    width:50px;
+    cursor:pointer;
+        :hover{
+            opacity:0.8;
+            color:#0066FF;
+        }
 `
 const ItemDeleteIcon = styled(DeleteIcon)`
-font-size:18px;
-cursor:pointer;
-    :hover{
-        opacity:0.8;
-        color:#0066FF;
+    font-size:18px;
+    cursor:pointer;
+        :hover{
+            opacity:0.8;
+            color:#0066FF;
 
-    }
+        }
 `
 export default TaskHistory

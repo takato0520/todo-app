@@ -22,7 +22,7 @@ const Header = () => {
         <>
             {(location.pathname === "/" || location.pathname === "/taskHistory") ?
                 < Ul >
-                    <Li onClick={moveToLogin}>logout</Li>
+                    <Li onClick={moveToLogin}>ログアウト</Li>
                     {
                         (location.pathname === "/") ?
                             <Li onClick={moveToTaskHistory}>履歴</Li>

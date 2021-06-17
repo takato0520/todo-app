@@ -254,6 +254,7 @@ width:35%;
 `
 const ItemDetail = styled(Item)`
 width:50px;
+cursor:pointer;
     :hover{
         opacity:0.8;
         color:#0066FF;

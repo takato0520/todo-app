@@ -5,21 +5,17 @@ import styled from 'styled-components';
 const SignUp = ({ history }) => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
-    const [name, setName] = useState('')
 
     const handleSubmit = (e) => {
         e.preventDefault()
         firebase.auth().createUserWithEmailAndPassword(email, password)
-            .then(({ user }) => {
+            .then(() => {
                 history.push("/");
-                user.updateProfile({
-                    displayName: name
-                })
             })
             .catch(err => {
                 setEmail('');
                 setPassword('');
-                alert('Wrong .');
+                alert(err);
                 console.log(err)
             })
     }
@@ -34,8 +30,8 @@ const SignUp = ({ history }) => {
         <div>
             <Title>Sign Up</Title>
             <form onSubmit={handleSubmit}>
-                <Wrap>
-                    <InputWrap>
+                <Box>
+                    <InputBox>
                         <label htmlFor='email'>E-mail</label>
                         <Input
                             onChange={e => { setEmail(e.target.value) }}
@@ -44,8 +40,8 @@ const SignUp = ({ history }) => {
                             id='email'
                             placeholder='Email'
                         />
-                    </InputWrap>
-                    <InputWrap>
+                    </InputBox>
+                    <InputBox>
                         <label htmlFor='password'>Password</label>
                         <Input
                             onChange={e => { setPassword(e.target.value) }}
@@ -54,22 +50,12 @@ const SignUp = ({ history }) => {
                             id='password'
                             placeholder='Password'
                         />
-                    </InputWrap>
-                    <InputWrap>
-                        <label htmlFor='name'>name</label>
-                        <Input
-                            onChange={e => { setName(e.target.value) }}
-                            name='name'
-                            type='name'
-                            id='name'
-                            placeholder='name'
-                        />
-                    </InputWrap>
-                </Wrap>
-                <ButtonWrap>
-                    <Button type='submit'>Sign Up</Button>
-                    <Button onClick={changeSubmit}>ログインへ</Button>
-                </ButtonWrap>
+                    </InputBox>
+                    <ButtonWrap>
+                        <SignupButton type='submit'>Sign Up</SignupButton>
+                        <LoginButton onClick={changeSubmit}>アカウントをお持ちの方はこちら</LoginButton>
+                    </ButtonWrap>
+                </Box>
             </form>
         </div>
     )
@@ -79,19 +65,21 @@ const SignUp = ({ history }) => {
 
 const Title = styled.h1`
  text-align: center;
+ margin-top:10px;
  font-size: 45px;
  width: 100%;
  `;
 
-const Wrap = styled.div`
+const Box = styled.div`
  display: flex;
  flex-direction: column;
  align-items: center;
  `
-const InputWrap = styled.div`
+const InputBox = styled.div`
  display: flex;
  flex-direction: column;
- width: 100%;
+ padding:10px;
+ width: 60%;
  `
 const Input = styled.input`
  padding:5px;
@@ -104,15 +92,29 @@ const ButtonWrap = styled.div`
  flex-direction: column;
  align-items: center;
  `
-const Button = styled.button`
+const SignupButton = styled.button`
  width: 100%;
  margin-top:10px;
  margin-bottom:30px;
  padding:15px;
  font-size:18px;
  border:1px solid black;
+ background-color:#00DD00;
+ color:white;
+ cursor:pointer;pointer;
+ :hover{
+     background-color:#CCFFFF;
+     color:black
+ }
  `
 
-
+const LoginButton = styled.div`
+ width: 100%;
+ font-size:18px;
+ cursor:pointer;
+ :hover{
+     color:blue;
+ }
+ `
 
 export default SignUp
