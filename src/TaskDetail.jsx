@@ -3,6 +3,7 @@ import firebase from './config/firebase'
 import 'firebase/firestore'
 import styled from 'styled-components'
 import { useParams, useHistory } from 'react-router-dom'
+import dayjs from 'dayjs'
 
 const TaskDetail = () => {
     const history = useHistory()
@@ -47,46 +48,105 @@ const TaskDetail = () => {
 
     return (
         <>
-            <h1>タスク名:{task?.taskName}</h1>
-            <div>期限:{task?.deadline}</div>
-            <div>かかる時間:{task?.requiredTime}</div>
-            <h2>タスクの詳細</h2>
-            <Textarea
-                value={task?.detail}
-                onChange={
-                    e => {
-                        setTask({ ...task, detail: e.target.value })
-                        setIsChanged(true)
+            <Box>
+                <ItemBox>
+                    <ItemTaskName>
+                        <div>タスク名</div>
+                        <div>{task?.taskName}</div>
+                    </ItemTaskName>
+                    <ItemDeadline>
+                        <div>期限</div>
+                        <div>{dayjs(task?.deadline).format('YYYY/MM/DD HH:mm')}</div>
+                    </ItemDeadline>
+                    <ItemRequiredTime>
+                        <div>かかる時間</div>
+                        <div>{task?.requiredTime} min</div>
+                    </ItemRequiredTime>
+                    <Title>詳細</Title>
+                </ItemBox>
+                <Textarea
+                    value={task?.detail}
+                    onChange={
+                        e => {
+                            setTask({ ...task, detail: e.target.value })
+                            setIsChanged(true)
+                        }
                     }
-                }
-            />
-            <ButtonWrap>
-                <Button onClick={saveTextData}>保存</Button>
-                <Button onClick={deleteText}>削除</Button>
-                <Button onClick={moveToRoom}>閉じる</Button>
-            </ButtonWrap>
+                />
+                <ButtonWrap>
+                    <Button onClick={saveTextData}>保存</Button>
+                    <Button onClick={deleteText}>削除</Button>
+                    <Button onClick={moveToRoom}>閉じる</Button>
+                </ButtonWrap>
+            </Box>
         </>
     )
 }
 
+const Box = styled.div`
+
+`
+
+const Title = styled.div`
+width:80%;
+font-size:20px;
+margin:0 auto;
+margin-top:10px;
+`
+
+const ItemBox = styled.div`
+display:flex;
+flex-direction:column;
+`
+
+const ItemTaskName = styled.div`
+width:80%;
+margin:0 auto;
+margin-top:10px;
+`
+
+const ItemDeadline = styled.div`
+width:80%;
+margin:0 auto;
+margin-top:10px;
+`
+
+const ItemRequiredTime = styled.div`
+width:80%;
+margin:0 auto;
+margin-top:10px;
+`
+
 const Textarea = styled.textarea`
-width:500px;
+width:80%;
 height:100px;
+display:block;
+margin:0 auto;
+margin-top:10px;
+box-sizing:border-box;
+border:1px solid black;
 `
 
 const Button = styled.button`
-color:#000;
-background-color:yellow;
-width:100px;
+margin-top:2px;
+color:white;
+background-color:#00DD00;
 cursor:pointer;
+    :hover{
+        opacity:0.8;
+        background-color:#CCFFFF;
+        color:black
+    }
 `
 
 
 const ButtonWrap = styled.div`
-    :hover{
-        opacity:0.8;
-        color:#0066FF;
-    }
+    margin:0 auto;
+    margin-top:10px;
+    width:80%;
+    display:flex;
+    flex-direction:column;
+
 `
 
 
